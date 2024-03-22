@@ -45,7 +45,5 @@ async def echo_handler(message: types.Message):
         # But not all the types is supported to be copied so need to handle it
         await message.answer("Nice try!")
 
-
-
 if __name__ == "__main__":
     asyncio.run(main())

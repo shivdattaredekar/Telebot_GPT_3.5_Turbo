@@ -9,7 +9,7 @@ from aiogram.filters import CommandStart
 
 
 load_dotenv()  # This is done to access the .env file
-openai.api_key('OpenAI_API_KEY') # This is done to access OPENAI key
+openai.api_key = os.getenv("OPENAI_API_KEY") # This is done to access OPENAI key
 BOT_TOKEN = os.getenv('TOKEN') # This is done to access BOT key
 
 # model_name
@@ -30,6 +30,12 @@ class Reference():
     def __init__(self) -> None:
         self.response = ""
 
+reference = Reference()
+
+# A function to clear the previous conversation and context.
+def clear_past():
+    reference.response = ""
+
 # This handler receives messages with `/start` or  `/help `command
 @dp.message(CommandStart())
 async def welcome(message:types.Message):
@@ -37,20 +43,20 @@ async def welcome(message:types.Message):
 
 # A handler to clear the previous conversation and context.
 @dp.message(CommandStart())
-async def welcome(message:types.Message):
+async def clear(message:types.Message):
     await message.reply("I've cleared the past conversation and context.")
 
 # A handler to display the help menu.  
 @dp.message(CommandStart())
-async def welcome(message:types.Message):
-    """
-    help_command = ""
+async def helper(message:types.Message):
+    
+    help_command = """
     Hi There, I'm chatGPT Telegram bot created by Bappy! Please follow these commands - 
     /start - to start the conversation
     /clear - to clear the past conversation and context.
     /help - to get this help menu.
-    I hope this helps. :)
-    """
+    I hope this helps. :) """
+    
     await message.reply("help_command")
 
 # A handler to process the user's input and generate a response using the chatGPT API.
@@ -60,13 +66,13 @@ async def chatgpt(message:types.Message):
     response = openai.ChatCompletion.create(
         model = MODEL_NAME,
         message = [
-            {'role' : 'assistant', 'content' : Reference.response}, # Role assistant 
+            {'role' : 'assistant', 'content' : reference.response}, # Role assistant 
             {'role' : 'user', 'content' : message.text} # Our Query 
         ]
     )
-    Reference.response = response['choice'][0]['message']['content']
-    print(f">>> chatGPT: \n\t{Reference.response}")
-    await bot.send_message(chat_id= message.chat.id, text = Reference.response)
+    reference.response = response['choice'][0]['message']['content']
+    print(f">>> chatGPT: \n\t{reference.response}")
+    await bot.send_message(chat_id= message.chat.id, text = reference.response)
     
 if __name__ == '__main__':
     asyncio.run(main())
