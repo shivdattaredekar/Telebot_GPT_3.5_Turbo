@@ -63,7 +63,7 @@ async def helper(message:types.Message):
 @dp.message()
 async def chatgpt(message:types.Message):
     print(f">>> USER: \n\t{message.text}")
-    response = openai.ChatCompletion.create(
+    response = openai.Completion.create(
         model = MODEL_NAME,
         message = [
             {'role' : 'assistant', 'content' : reference.response}, # Role assistant 
@@ -76,17 +76,4 @@ async def chatgpt(message:types.Message):
     
 if __name__ == '__main__':
     asyncio.run(main())
-
-
-
-
-
-
-
-
-
-
-
-
-
 
