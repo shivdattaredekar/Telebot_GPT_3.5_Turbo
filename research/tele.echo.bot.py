@@ -32,5 +32,20 @@ async def command_start_handler(message: types.Message):
     """
     await message.reply("Hi\nI am Echo Bot!\nPowered by aiogram.")
 
+
+@dp.message()
+async def echo_handler(message: types.Message):
+    """
+    This will retrun echo
+    """
+    try:
+        # Send a copy of the received message
+        await message.send_copy(chat_id=message.chat.id)
+    except TypeError:
+        # But not all the types is supported to be copied so need to handle it
+        await message.answer("Nice try!")
+
+
+
 if __name__ == "__main__":
     asyncio.run(main())
