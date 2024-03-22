@@ -7,3 +7,5 @@ python-dotenv - This lib is used to hide our API key in GitHub to protect it
 aiogram -  This lib is used to connect to Telegram 
 openai - This lib is used to create the API key
 
+i am making push from VSCODE
+
